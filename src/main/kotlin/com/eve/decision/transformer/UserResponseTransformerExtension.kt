@@ -9,15 +9,17 @@ import java.util.stream.Collectors
 
 fun User?.toUserResponse(): UserResponse {
 
+    val mappedRoles: MutableSet<String> = this?.roles?.stream()
+            ?.map { item: Role? -> item!!.name?.name }
+            ?.collect(Collectors.toSet()) ?: Collections.emptySet()
+
     return UserResponse(
             id = this?.id ?: 1L,
             username = this?.username ?: "",
             firstName = this?.firstName ?: "",
             lastName = this?.lastName ?: "",
             email = this?.email ?: "",
-            roles = this?.roles?.stream()
-                    ?.map { item: Role? -> item!!.name?.name }
-                    ?.collect(Collectors.toSet()) as Set<String>? ?: Collections.emptySet(),
+            roles = mappedRoles,
             createdAt = this?.createdAt ?: LocalDateTime.now(),
             updatedAt = this?.updatedAt ?: LocalDateTime.now(),
     )
