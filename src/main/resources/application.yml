@@ -1,0 +1,26 @@
+server:
+  port: 8181
+  servlet.context-path: /api
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/decision
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate # hibernate ddl auto values (create, create-drop, validate, update)
+    show-sql: false
+    properties:
+      hibernte:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  flyway:
+    locations: classpath:db/migration
+app:
+  jwtSecret: MegaLargeSigningSecretKeyForDemoApplicationMegaLargeSigningSecretKeyForDemoApplication
+  jwtExpirationMs: 86400000
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate: INFO
