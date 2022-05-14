@@ -16,5 +16,4 @@ interface UserManagementService {
     fun update(updateUserRequest: UpdateUserRequest): UserResponse
     fun deleteById(id: Long)
     fun login(loginUserRequest: LoginUserRequest): JwtResponse
-
 }

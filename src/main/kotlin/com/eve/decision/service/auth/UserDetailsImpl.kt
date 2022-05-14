@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserDetailsImpl(
-        var id: Long?,
+        var id: Long,
         var userName: String,
         var email: String,
         @JsonIgnore var pass: String,
