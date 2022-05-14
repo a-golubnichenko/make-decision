@@ -26,6 +26,8 @@ class JwtUtils {
     @Value("\${app.jwtExpirationMs}")
     val jwtExpirationMs: Long? = null
 
+    var key: Key? = null;
+
     fun generateJwtToken(authentication: Authentication): String? {
         val userPrincipal = authentication.principal as UserDetailsImpl
         return Jwts.builder().setSubject(userPrincipal.username).setIssuedAt(Date())
@@ -56,8 +58,11 @@ class JwtUtils {
     }
 
     private fun getSigningKey(): Key? {
-        val keyBytes: ByteArray = jwtSecret!!.toByteArray(StandardCharsets.UTF_8)
-        return Keys.hmacShaKeyFor(keyBytes)
+        if (key == null) {
+            val keyBytes: ByteArray = jwtSecret!!.toByteArray(StandardCharsets.UTF_8)
+            key = Keys.hmacShaKeyFor(keyBytes)
+        }
+        return key;
     }
 
 }
