@@ -45,9 +45,9 @@ class QuestionManagementServiceImpl(
         return this.saveOrUpdate(question)
     }
 
-//    override fun deleteById(id: Long) {
-//        this.userDao.deleteById(id)
-//    }
+    override fun deleteQuestionById(id: Long) {
+        this.questionDao.deleteById(id)
+    }
 
     private fun findQuestionByIdOrNull(id: Long): Question? = this.questionDao.findByIdOrNull(id)
 

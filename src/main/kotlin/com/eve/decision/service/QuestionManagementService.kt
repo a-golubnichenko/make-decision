@@ -11,6 +11,6 @@ interface QuestionManagementService {
     fun findQuestionsByUser(userId: Long, pageable: Pageable): Page<QuestionResponse?>
     fun saveQuestion(userId: Long, saveQuestionRequest: SaveQuestionRequest): QuestionResponse
     fun updateQuestion(userId: Long, questionId: Long, saveQuestionRequest: SaveQuestionRequest): QuestionResponse
-    //fun deleteById(id: Long)
+    fun deleteQuestionById(id: Long)
 
 }

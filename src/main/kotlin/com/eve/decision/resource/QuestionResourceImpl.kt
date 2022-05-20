@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -49,6 +50,12 @@ class QuestionResourceImpl(
     ): ResponseEntity<QuestionResponse> {
         val userId: Long = (authentication.principal as UserDetailsImpl).id
         return ResponseEntity.ok(this.questionManagementService.updateQuestion(userId, id, saveQuestionRequest))
+    }
+
+    @DeleteMapping("/{id}")
+    override fun deleteQuestion(authentication: Authentication, @PathVariable id: Long): ResponseEntity<Unit> {
+        this.questionManagementService.deleteQuestionById(id)
+        return ResponseEntity.noContent().build()
     }
 
     companion object {
