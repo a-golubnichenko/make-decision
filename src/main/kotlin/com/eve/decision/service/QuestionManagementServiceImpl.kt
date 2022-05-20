@@ -97,6 +97,17 @@ class QuestionManagementServiceImpl(
         return this.saveOrUpdateOption(option)
     }
 
+    override fun deleteOptionById(userId: Long, questionId: Long, optionId: Long) {
+        val option = findOptionByIdOrNull(optionId) ?: throw IllegalStateException("$optionId not found")
+        if (option.question.userId != userId) {
+            throw IllegalStateException("You are not author of this question")
+        }
+        if (option.question.id != questionId) {
+            throw IllegalStateException("It is not an option of this question")
+        }
+        this.optionDao.deleteById(optionId)
+    }
+
     private fun findQuestionByIdOrNull(id: Long): Question? = this.questionDao.findByIdOrNull(id)
 
     private fun saveOrUpdateQuestion(question: Question): QuestionResponse = this.questionDao.save(question).toQuestionResponse()

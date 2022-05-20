@@ -82,6 +82,16 @@ class QuestionResourceImpl(
         return ResponseEntity.ok(this.questionManagementService.updateOption(userId, questionId, optionId, saveOptionRequest))
     }
 
+    @DeleteMapping("/{questionId}/option/{optionId}")
+    override fun deleteOption(
+            authentication: Authentication,
+            @PathVariable questionId: Long,
+            @PathVariable optionId: Long
+    ): ResponseEntity<Unit> {
+        val userId: Long = (authentication.principal as UserDetailsImpl).id
+        this.questionManagementService.deleteOptionById(userId, questionId, optionId)
+        return ResponseEntity.noContent().build()
+    }
 
     companion object {
         const val BASE_QUESTION_RESOURCE_URL: String = "v1/question"

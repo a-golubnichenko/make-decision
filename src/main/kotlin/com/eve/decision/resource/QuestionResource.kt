@@ -18,5 +18,6 @@ interface QuestionResource {
 
     fun addOption(authentication: Authentication, questionId: Long, saveOptionRequest: SaveOptionRequest): ResponseEntity<OptionResponse>
     fun updateOption(authentication: Authentication, questionId: Long, optionId: Long, saveOptionRequest: SaveOptionRequest): ResponseEntity<OptionResponse>
+    fun deleteOption(authentication: Authentication, questionId: Long, optionId: Long): ResponseEntity<Unit>
 
 }

@@ -17,4 +17,5 @@ interface QuestionManagementService {
 
     fun addOption(userId: Long, questionId: Long, optionRequest: SaveOptionRequest): OptionResponse
     fun updateOption(userId: Long, questionId: Long, optionId: Long, optionRequest: SaveOptionRequest): OptionResponse
+    fun deleteOptionById(userId: Long, questionId: Long, optionId: Long)
 }
