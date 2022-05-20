@@ -28,6 +28,6 @@ class Option {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
-    var question: Question? = null
+    var question: Question = Question()
 
 }

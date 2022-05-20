@@ -1,7 +1,9 @@
 package com.eve.decision.resource
 
+import com.eve.decision.dto.OptionResponse
 import com.eve.decision.dto.SaveQuestionRequest
 import com.eve.decision.dto.QuestionResponse
+import com.eve.decision.dto.SaveOptionRequest
 import com.eve.decision.resource.QuestionResourceImpl.Companion.BASE_QUESTION_RESOURCE_URL
 import com.eve.decision.service.QuestionManagementService
 import com.eve.decision.service.auth.UserDetailsImpl
@@ -57,6 +59,29 @@ class QuestionResourceImpl(
         this.questionManagementService.deleteQuestionById(id)
         return ResponseEntity.noContent().build()
     }
+
+    @PostMapping("/{questionId}/option")
+    override fun addOption(
+            authentication: Authentication,
+            @PathVariable questionId: Long,
+            @RequestBody saveOptionRequest: SaveOptionRequest
+    ): ResponseEntity<OptionResponse> {
+        val userId: Long = (authentication.principal as UserDetailsImpl).id
+        return ResponseEntity.ok(this.questionManagementService.addOption(userId, questionId, saveOptionRequest))
+
+    }
+
+    @PutMapping("/{questionId}/option/{optionId}")
+    override fun updateOption(
+            authentication: Authentication,
+            @PathVariable questionId: Long,
+            @PathVariable optionId: Long,
+            @RequestBody saveOptionRequest: SaveOptionRequest
+    ): ResponseEntity<OptionResponse> {
+        val userId: Long = (authentication.principal as UserDetailsImpl).id
+        return ResponseEntity.ok(this.questionManagementService.updateOption(userId, questionId, optionId, saveOptionRequest))
+    }
+
 
     companion object {
         const val BASE_QUESTION_RESOURCE_URL: String = "v1/question"

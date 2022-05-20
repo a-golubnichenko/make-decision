@@ -29,6 +29,6 @@ class Question {
     var updatedAt: LocalDateTime = LocalDateTime.now()
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    private val options: Set<Option> = HashSet()
+    val options: MutableSet<Option> = HashSet()
 
 }
