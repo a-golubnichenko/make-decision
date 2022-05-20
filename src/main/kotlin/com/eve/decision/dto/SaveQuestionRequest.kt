@@ -1,6 +1,6 @@
 package com.eve.decision.dto
 
-data class AddQuestionRequest(
+data class SaveQuestionRequest(
         val text: String
 
 )
