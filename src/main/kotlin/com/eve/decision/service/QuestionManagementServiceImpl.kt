@@ -23,7 +23,7 @@ class QuestionManagementServiceImpl(
         private val optionDao: OptionDao
 ) : QuestionManagementService {
 
-    override fun findQuestionById(id: Long): QuestionResponse? = this.findQuestionByIdOrNull(id).toQuestionResponse()
+    override fun findQuestion(id: Long): QuestionResponse? = this.findQuestionByIdOrNull(id).toQuestionResponse()
 
     override fun findQuestionsByUser(userId: Long, pageable: Pageable): Page<QuestionResponse?> =
             this.questionDao.findByUserId(userId, pageable).map(Question::toQuestionResponse)
@@ -44,15 +44,18 @@ class QuestionManagementServiceImpl(
             saveQuestionRequest: SaveQuestionRequest
     ): QuestionResponse {
         val question = findQuestionByIdOrNull(questionId) ?: throw IllegalStateException("$questionId not found")
+        checkQuestionPermissions(question, userId)
         question.text = saveQuestionRequest.text
+        question.userId = userId
         question.updatedAt = LocalDateTime.now()
         return this.saveOrUpdateQuestion(question)
     }
 
-    override fun deleteQuestionById(id: Long) {
-        this.questionDao.deleteById(id)
+    override fun deleteQuestion(userId: Long, questionId: Long) {
+        val question = findQuestionByIdOrNull(questionId) ?: throw IllegalStateException("$questionId not found")
+        checkQuestionPermissions(question, userId)
+        this.questionDao.deleteById(questionId)
     }
-
 
     override fun addOption(
             userId: Long,
@@ -63,9 +66,7 @@ class QuestionManagementServiceImpl(
             throw IllegalStateException("Option is empty")
         }
         val question = findQuestionByIdOrNull(questionId) ?: throw IllegalStateException("$questionId not found")
-        if (question.userId != userId) {
-            throw IllegalStateException("You are not author of this question")
-        }
+        checkQuestionPermissions(question, userId)
         val option = Option()
         option.question = question
         option.text = optionRequest.text
@@ -81,12 +82,8 @@ class QuestionManagementServiceImpl(
             optionRequest: SaveOptionRequest
     ): OptionResponse {
         val option = findOptionByIdOrNull(optionId) ?: throw IllegalStateException("$optionId not found")
-        if (option.question.userId != userId) {
-            throw IllegalStateException("You are not author of this question")
-        }
-        if (option.question.id != questionId) {
-            throw IllegalStateException("It is not an option of this question")
-        }
+        checkQuestionPermissions(option.question, userId)
+        checkOptionPermissions(option, questionId)
         if (optionRequest.text != null) {
             option.text = optionRequest.text
         }
@@ -97,14 +94,11 @@ class QuestionManagementServiceImpl(
         return this.saveOrUpdateOption(option)
     }
 
-    override fun deleteOptionById(userId: Long, questionId: Long, optionId: Long) {
+    override fun deleteOption(userId: Long, questionId: Long, optionId: Long) {
         val option = findOptionByIdOrNull(optionId) ?: throw IllegalStateException("$optionId not found")
-        if (option.question.userId != userId) {
-            throw IllegalStateException("You are not author of this question")
-        }
-        if (option.question.id != questionId) {
-            throw IllegalStateException("It is not an option of this question")
-        }
+        checkQuestionPermissions(option.question, userId)
+        checkOptionPermissions(option, questionId)
+
         this.optionDao.deleteById(optionId)
     }
 
@@ -115,5 +109,17 @@ class QuestionManagementServiceImpl(
     private fun findOptionByIdOrNull(id: Long): Option? = this.optionDao.findByIdOrNull(id)
 
     private fun saveOrUpdateOption(option: Option): OptionResponse = this.optionDao.save(option).toOptionResponse()
+
+    private fun checkQuestionPermissions(question: Question, userId: Long) {
+        if (question.userId != userId) {
+            throw IllegalStateException("You are not author of this question")
+        }
+    }
+
+    private fun checkOptionPermissions(option: Option, questionId: Long) {
+        if (option.question.id != questionId) {
+            throw IllegalStateException("It is not an option of this question")
+        }
+    }
 
 }

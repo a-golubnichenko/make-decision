@@ -51,6 +51,7 @@ class WebSecurityConfig(
                 .authorizeRequests()
                 .antMatchers("/v1/user/login/**").permitAll()
                 .antMatchers("/v1/admin/**").hasRole("ADMIN")
+                .antMatchers("/v1/question/**").hasAnyRole("ADMIN", "USER", "MODERATOR")
                 .antMatchers("/v1/noop/**").permitAll()
                 .anyRequest().authenticated()
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)

@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication
 
 interface QuestionResource {
 
-    fun findQuestionsByUserId(authentication: Authentication, pageable: Pageable): ResponseEntity<Page<QuestionResponse?>>
+    fun findQuestionsByUser(authentication: Authentication, pageable: Pageable): ResponseEntity<Page<QuestionResponse?>>
     fun addQuestion(authentication: Authentication, saveQuestionRequest: SaveQuestionRequest): ResponseEntity<QuestionResponse>
     fun updateQuestion(authentication: Authentication, id: Long, saveQuestionRequest: SaveQuestionRequest): ResponseEntity<QuestionResponse>
     fun deleteQuestion(authentication: Authentication, id: Long): ResponseEntity<Unit>

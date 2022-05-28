@@ -27,7 +27,7 @@ class QuestionResourceImpl(
 ) : QuestionResource {
 
     @GetMapping
-    override fun findQuestionsByUserId(
+    override fun findQuestionsByUser(
             authentication: Authentication,
             pageable: Pageable
     ): ResponseEntity<Page<QuestionResponse?>> {
@@ -56,7 +56,8 @@ class QuestionResourceImpl(
 
     @DeleteMapping("/{id}")
     override fun deleteQuestion(authentication: Authentication, @PathVariable id: Long): ResponseEntity<Unit> {
-        this.questionManagementService.deleteQuestionById(id)
+        val userId: Long = (authentication.principal as UserDetailsImpl).id
+        this.questionManagementService.deleteQuestion(userId, id)
         return ResponseEntity.noContent().build()
     }
 
@@ -89,7 +90,7 @@ class QuestionResourceImpl(
             @PathVariable optionId: Long
     ): ResponseEntity<Unit> {
         val userId: Long = (authentication.principal as UserDetailsImpl).id
-        this.questionManagementService.deleteOptionById(userId, questionId, optionId)
+        this.questionManagementService.deleteOption(userId, questionId, optionId)
         return ResponseEntity.noContent().build()
     }
 
