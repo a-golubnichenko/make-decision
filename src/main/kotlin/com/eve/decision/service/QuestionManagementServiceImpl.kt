@@ -8,6 +8,7 @@ import com.eve.decision.dto.SaveOptionRequest
 import com.eve.decision.dto.SaveQuestionRequest
 import com.eve.decision.model.Option
 import com.eve.decision.model.Question
+import com.eve.decision.service.auth.UserDetailsImpl
 import com.eve.decision.transformer.toOptionResponse
 import com.eve.decision.transformer.toQuestionResponse
 import org.springframework.data.domain.Page
@@ -25,40 +26,40 @@ class QuestionManagementServiceImpl(
 
     override fun findQuestion(id: Long): QuestionResponse? = this.findQuestionByIdOrNull(id).toQuestionResponse()
 
-    override fun findQuestionsByUser(userId: Long, pageable: Pageable): Page<QuestionResponse?> =
-            this.questionDao.findByUserId(userId, pageable).map(Question::toQuestionResponse)
+    override fun findQuestionsByUser(userDetails: UserDetailsImpl, pageable: Pageable): Page<QuestionResponse?> =
+            this.questionDao.findByUserId(userDetails.id, pageable).map(Question::toQuestionResponse)
 
     override fun saveQuestion(
-            userId: Long,
+            userDetails: UserDetailsImpl,
             saveQuestionRequest: SaveQuestionRequest
     ): QuestionResponse {
         val question = Question()
-        question.userId = userId
+        question.userId = userDetails.id
         question.text = saveQuestionRequest.text
         return this.saveOrUpdateQuestion(question)
     }
 
     override fun updateQuestion(
-            userId: Long,
+            userDetails: UserDetailsImpl,
             questionId: Long,
             saveQuestionRequest: SaveQuestionRequest
     ): QuestionResponse {
         val question = findQuestionByIdOrNull(questionId) ?: throw IllegalStateException("$questionId not found")
-        checkQuestionPermissions(question, userId)
+        checkQuestionPermissions(question, userDetails)
         question.text = saveQuestionRequest.text
-        question.userId = userId
+        question.userId = userDetails.id
         question.updatedAt = LocalDateTime.now()
         return this.saveOrUpdateQuestion(question)
     }
 
-    override fun deleteQuestion(userId: Long, questionId: Long) {
+    override fun deleteQuestion(userDetails: UserDetailsImpl, questionId: Long) {
         val question = findQuestionByIdOrNull(questionId) ?: throw IllegalStateException("$questionId not found")
-        checkQuestionPermissions(question, userId)
+        checkQuestionPermissions(question, userDetails)
         this.questionDao.deleteById(questionId)
     }
 
     override fun addOption(
-            userId: Long,
+            userDetails: UserDetailsImpl,
             questionId: Long,
             optionRequest: SaveOptionRequest
     ): OptionResponse {
@@ -66,7 +67,7 @@ class QuestionManagementServiceImpl(
             throw IllegalStateException("Option is empty")
         }
         val question = findQuestionByIdOrNull(questionId) ?: throw IllegalStateException("$questionId not found")
-        checkQuestionPermissions(question, userId)
+        checkQuestionPermissions(question, userDetails)
         val option = Option()
         option.question = question
         option.text = optionRequest.text
@@ -76,13 +77,13 @@ class QuestionManagementServiceImpl(
     }
 
     override fun updateOption(
-            userId: Long,
+            userDetails: UserDetailsImpl,
             questionId: Long,
             optionId: Long,
             optionRequest: SaveOptionRequest
     ): OptionResponse {
         val option = findOptionByIdOrNull(optionId) ?: throw IllegalStateException("$optionId not found")
-        checkQuestionPermissions(option.question, userId)
+        checkQuestionPermissions(option.question, userDetails)
         checkOptionPermissions(option, questionId)
         if (optionRequest.text != null) {
             option.text = optionRequest.text
@@ -94,9 +95,9 @@ class QuestionManagementServiceImpl(
         return this.saveOrUpdateOption(option)
     }
 
-    override fun deleteOption(userId: Long, questionId: Long, optionId: Long) {
+    override fun deleteOption(userDetails: UserDetailsImpl, questionId: Long, optionId: Long) {
         val option = findOptionByIdOrNull(optionId) ?: throw IllegalStateException("$optionId not found")
-        checkQuestionPermissions(option.question, userId)
+        checkQuestionPermissions(option.question, userDetails)
         checkOptionPermissions(option, questionId)
 
         this.optionDao.deleteById(optionId)
@@ -110,8 +111,8 @@ class QuestionManagementServiceImpl(
 
     private fun saveOrUpdateOption(option: Option): OptionResponse = this.optionDao.save(option).toOptionResponse()
 
-    private fun checkQuestionPermissions(question: Question, userId: Long) {
-        if (question.userId != userId) {
+    private fun checkQuestionPermissions(question: Question, userDetails: UserDetailsImpl) {
+        if (question.userId != userDetails.id && !userDetails.isAdmin()) {
             throw IllegalStateException("You are not author of this question")
         }
     }

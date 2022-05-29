@@ -1,9 +1,9 @@
 package com.eve.decision.resource
 
 import com.eve.decision.dto.OptionResponse
-import com.eve.decision.dto.SaveQuestionRequest
 import com.eve.decision.dto.QuestionResponse
 import com.eve.decision.dto.SaveOptionRequest
+import com.eve.decision.dto.SaveQuestionRequest
 import com.eve.decision.resource.QuestionResourceImpl.Companion.BASE_QUESTION_RESOURCE_URL
 import com.eve.decision.service.QuestionManagementService
 import com.eve.decision.service.auth.UserDetailsImpl
@@ -31,8 +31,8 @@ class QuestionResourceImpl(
             authentication: Authentication,
             pageable: Pageable
     ): ResponseEntity<Page<QuestionResponse?>> {
-        val userId: Long = (authentication.principal as UserDetailsImpl).id
-        return ResponseEntity.ok(this.questionManagementService.findQuestionsByUser(userId, pageable))
+        val userDetails: UserDetailsImpl = (authentication.principal as UserDetailsImpl)
+        return ResponseEntity.ok(this.questionManagementService.findQuestionsByUser(userDetails, pageable))
     }
 
     @PostMapping
@@ -40,8 +40,8 @@ class QuestionResourceImpl(
             authentication: Authentication,
             @RequestBody saveQuestionRequest: SaveQuestionRequest
     ): ResponseEntity<QuestionResponse> {
-        val userId: Long = (authentication.principal as UserDetailsImpl).id
-        return ResponseEntity.ok(this.questionManagementService.saveQuestion(userId, saveQuestionRequest))
+        val userDetails: UserDetailsImpl = (authentication.principal as UserDetailsImpl)
+        return ResponseEntity.ok(this.questionManagementService.saveQuestion(userDetails, saveQuestionRequest))
     }
 
     @PutMapping("/{id}")
@@ -50,14 +50,14 @@ class QuestionResourceImpl(
             @PathVariable id: Long,
             @RequestBody saveQuestionRequest: SaveQuestionRequest
     ): ResponseEntity<QuestionResponse> {
-        val userId: Long = (authentication.principal as UserDetailsImpl).id
-        return ResponseEntity.ok(this.questionManagementService.updateQuestion(userId, id, saveQuestionRequest))
+        val userDetails: UserDetailsImpl = (authentication.principal as UserDetailsImpl)
+        return ResponseEntity.ok(this.questionManagementService.updateQuestion(userDetails, id, saveQuestionRequest))
     }
 
     @DeleteMapping("/{id}")
     override fun deleteQuestion(authentication: Authentication, @PathVariable id: Long): ResponseEntity<Unit> {
-        val userId: Long = (authentication.principal as UserDetailsImpl).id
-        this.questionManagementService.deleteQuestion(userId, id)
+        val userDetails: UserDetailsImpl = (authentication.principal as UserDetailsImpl)
+        this.questionManagementService.deleteQuestion(userDetails, id)
         return ResponseEntity.noContent().build()
     }
 
@@ -67,8 +67,8 @@ class QuestionResourceImpl(
             @PathVariable questionId: Long,
             @RequestBody saveOptionRequest: SaveOptionRequest
     ): ResponseEntity<OptionResponse> {
-        val userId: Long = (authentication.principal as UserDetailsImpl).id
-        return ResponseEntity.ok(this.questionManagementService.addOption(userId, questionId, saveOptionRequest))
+        val userDetails: UserDetailsImpl = (authentication.principal as UserDetailsImpl)
+        return ResponseEntity.ok(this.questionManagementService.addOption(userDetails, questionId, saveOptionRequest))
 
     }
 
@@ -79,8 +79,8 @@ class QuestionResourceImpl(
             @PathVariable optionId: Long,
             @RequestBody saveOptionRequest: SaveOptionRequest
     ): ResponseEntity<OptionResponse> {
-        val userId: Long = (authentication.principal as UserDetailsImpl).id
-        return ResponseEntity.ok(this.questionManagementService.updateOption(userId, questionId, optionId, saveOptionRequest))
+        val userDetails: UserDetailsImpl = (authentication.principal as UserDetailsImpl)
+        return ResponseEntity.ok(this.questionManagementService.updateOption(userDetails, questionId, optionId, saveOptionRequest))
     }
 
     @DeleteMapping("/{questionId}/option/{optionId}")
@@ -89,8 +89,8 @@ class QuestionResourceImpl(
             @PathVariable questionId: Long,
             @PathVariable optionId: Long
     ): ResponseEntity<Unit> {
-        val userId: Long = (authentication.principal as UserDetailsImpl).id
-        this.questionManagementService.deleteOption(userId, questionId, optionId)
+        val userDetails: UserDetailsImpl = (authentication.principal as UserDetailsImpl)
+        this.questionManagementService.deleteOption(userDetails, questionId, optionId)
         return ResponseEntity.noContent().build()
     }
 

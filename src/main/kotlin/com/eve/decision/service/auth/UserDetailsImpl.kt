@@ -1,5 +1,6 @@
 package com.eve.decision.service.auth
 
+import com.eve.decision.model.ERole
 import com.eve.decision.model.User
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.security.core.GrantedAuthority
@@ -54,5 +55,7 @@ class UserDetailsImpl(
     override fun isAccountNonLocked(): Boolean {
         return true
     }
+
+    fun isAdmin() = authorities.any { it.authority.equals(ERole.ROLE_ADMIN.name) }
 
 }
