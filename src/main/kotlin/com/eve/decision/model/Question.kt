@@ -7,10 +7,8 @@ import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.JoinTable
-import javax.persistence.ManyToMany
 import javax.persistence.OneToMany
+import javax.persistence.OrderBy
 
 
 @Entity(name = "questions")
@@ -29,6 +27,7 @@ class Question {
     var updatedAt: LocalDateTime = LocalDateTime.now()
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    val options: MutableSet<Option> = HashSet()
+    @OrderBy("id asc")
+    val options: MutableCollection<Option> = ArrayList()
 
 }
