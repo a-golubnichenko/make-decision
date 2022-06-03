@@ -141,6 +141,56 @@ Response:
 ```
 
 # Manage questions
+## List questions
+Request:
+``` 
+GET /api/v1/question?size=100&amp;page=0 HTTP/1.1
+Host: localhost:8181
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1NDI1NDU2MywiZXhwIjoxNjU0MzQwOTYzfQ.rShJ4tqbyrWvJ48Pv1Og7kYzMYp5g2pIyryde0a_-r4pdswAU5ocdE1oOxvPV7OTCK8WFEZQfGR7d3r2247cpg
+``` 
+
+
+Response:
+```
+{
+    "content": [
+        {
+            "id": 6,
+            "userId": 1,
+            "text": "What would I like to drink today?",
+            "options": [],
+            "createdAt": "2022-06-03T14:10:06.219",
+            "updatedAt": "2022-06-03T14:12:57.502"
+        }
+    ],
+    "pageable": {
+        "sort": {
+            "unsorted": true,
+            "sorted": false,
+            "empty": true
+        },
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 100,
+        "paged": true,
+        "unpaged": false
+    },
+    "totalElements": 1,
+    "last": true,
+    "totalPages": 1,
+    "size": 100,
+    "number": 0,
+    "sort": {
+        "unsorted": true,
+        "sorted": false,
+        "empty": true
+    },
+    "numberOfElements": 1,
+    "first": true,
+    "empty": false
+}
+```
+
 ## Add a question
 Request:
 ``` 
@@ -165,6 +215,47 @@ Response:
     "createdAt": "2022-06-03T14:10:06.219",
     "updatedAt": "2022-06-03T14:10:06.219"
 }
+```
+
+## Edit a question
+Request:
+``` 
+PUT /api/v1/question/6 HTTP/1.1
+Host: localhost:8181
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1NDI1NDU2MywiZXhwIjoxNjU0MzQwOTYzfQ.rShJ4tqbyrWvJ48Pv1Og7kYzMYp5g2pIyryde0a_-r4pdswAU5ocdE1oOxvPV7OTCK8WFEZQfGR7d3r2247cpg
+
+{
+	"text" : "What would I like to drink today?"
+}
+``` 
+
+
+Response:
+```
+{
+    "id": 6,
+    "userId": 1,
+    "text": "What would I like to drink today?",
+    "options": [],
+    "createdAt": "2022-06-03T14:10:06.219",
+    "updatedAt": "2022-06-03T14:12:57.502"
+}
+```
+
+## Delete a question
+Request:
+``` 
+DELETE /api/v1/question/6 HTTP/1.1
+Host: localhost:8181
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1NDI1NDU2MywiZXhwIjoxNjU0MzQwOTYzfQ.rShJ4tqbyrWvJ48Pv1Og7kYzMYp5g2pIyryde0a_-r4pdswAU5ocdE1oOxvPV7OTCK8WFEZQfGR7d3r2247cpg
+``` 
+
+
+Response:
+```
+
 ```
 
 # Sample of calling anonymous endpoint
