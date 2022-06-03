@@ -63,7 +63,7 @@ Response:
 }
 ```
 
-# Sample of calling an authorized endpoint with pagination and sorting
+# List users (sample of calling an authorized endpoint with pagination and sorting)
 Request:
 ```
 GET /api/v1/user?size=100&amp;page=0&amp;sort=username,asc HTTP/1.1
@@ -137,6 +137,33 @@ Response:
     "numberOfElements": 3,
     "first": true,
     "empty": false
+}
+```
+
+# Manage questions
+## Add a question
+Request:
+``` 
+POST /api/v1/question HTTP/1.1
+Host: localhost:8181
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1Mzc1NjE2MSwiZXhwIjoxNjUzODQyNTYxfQ.fQNiz1SDovS8MdWWf5wJmJamiSHxVsXVAJDSuyiJybrN4Bd7DlwrmsFQX8iLU3Vbsh_p7YCwGytNIux3dV7tJw
+
+{
+  "text" : "What do I want to drink today?"
+}
+``` 
+
+
+Response:
+```
+{
+    "id": 6,
+    "userId": 1,
+    "text": "What do I want to drink today?",
+    "options": [],
+    "createdAt": "2022-06-03T14:10:06.219",
+    "updatedAt": "2022-06-03T14:10:06.219"
 }
 ```
 
