@@ -252,11 +252,68 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1NDI1NDU2MywiZXhwIjoxNjU0MzQwOTYzfQ.rShJ4tqbyrWvJ48Pv1Og7kYzMYp5g2pIyryde0a_-r4pdswAU5ocdE1oOxvPV7OTCK8WFEZQfGR7d3r2247cpg
 ``` 
 
+# Manage options for a question
+## Add an option for a question
+Request:
+``` 
+POST /api/v1/question/5/option HTTP/1.1
+Host: localhost:8181
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1NDI1NDU2MywiZXhwIjoxNjU0MzQwOTYzfQ.rShJ4tqbyrWvJ48Pv1Og7kYzMYp5g2pIyryde0a_-r4pdswAU5ocdE1oOxvPV7OTCK8WFEZQfGR7d3r2247cpg
+
+{
+  "text" : "tea"
+}
+``` 
+
 
 Response:
 ```
-
+{
+    "id": 5,
+    "questionId": 5,
+    "text": "tea",
+    "active": true,
+    "createdAt": "2022-06-03T14:19:59.475",
+    "updatedAt": "2022-06-03T14:19:59.475"
+}
 ```
+
+## Edit an option of a question
+Request:
+``` 
+PUT /api/v1/question/5/option/5 HTTP/1.1
+Host: localhost:8181
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1NDI1NDU2MywiZXhwIjoxNjU0MzQwOTYzfQ.rShJ4tqbyrWvJ48Pv1Og7kYzMYp5g2pIyryde0a_-r4pdswAU5ocdE1oOxvPV7OTCK8WFEZQfGR7d3r2247cpg
+
+{
+	"text" : "cofee",
+	"active" : false
+}
+``` 
+
+
+Response:
+```
+{
+    "id": 5,
+    "questionId": 5,
+    "text": "cofee",
+    "active": false,
+    "createdAt": "2022-06-03T14:19:59.475",
+    "updatedAt": "2022-06-03T14:21:54.339"
+}
+```
+
+## Delete an option of a question
+Request:
+``` 
+DELETE /api/v1/question/5/option/5 HTTP/1.1
+Host: localhost:8181
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY1NDI1NDU2MywiZXhwIjoxNjU0MzQwOTYzfQ.rShJ4tqbyrWvJ48Pv1Og7kYzMYp5g2pIyryde0a_-r4pdswAU5ocdE1oOxvPV7OTCK8WFEZQfGR7d3r2247cpg
+``` 
 
 # Sample of calling anonymous endpoint
 Request:
